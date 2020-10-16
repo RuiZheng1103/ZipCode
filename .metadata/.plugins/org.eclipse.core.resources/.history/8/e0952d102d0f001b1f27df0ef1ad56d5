@@ -1,0 +1,9 @@
+package com.rui.zipcode;
+
+import org.junit.*; 
+
+public class AppTest {
+	
+	
+	
+}

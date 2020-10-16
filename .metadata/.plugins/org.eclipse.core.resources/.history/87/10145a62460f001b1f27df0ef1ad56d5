@@ -1,0 +1,50 @@
+package com.rui.zipcode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+public class ZipCodePreProcess {
+
+	public static int[][] generateZipCodeArray(String zipcodeString) {
+		String[] zipcodeIntervals = zipcodeString.split(" ");
+		
+		List<int[]> zipcodeList = new ArrayList<int[]>();
+		for (int i = 0; i < zipcodeIntervals.length; i++) {
+			zipcodeList.add(validateZipCode(zipcodeIntervals[i]));
+		}
+		
+		int[][] zipcodeArray = new int[zipcodeList.size()][2];
+		for (int i = 0; i < zipcodeList.size(); i++) {
+			zipcodeArray[i] = zipcodeList.get(i);
+		}
+		return zipcodeArray;
+	}
+	
+	public static int[] validateZipCode(String zipcodeInterval) {
+		String[] zipcodeComb = zipcodeInterval.replaceAll("\\[|\\]", "").split(",");
+	
+		// ZipCode Pair Check
+		if (zipcodeComb.length != 2)
+			throw new IllegalArgumentException("Missing ZipCode");
+		
+		int[] zipcodePair = new int[2];
+		for (int i = 0; i < zipcodeComb.length; i++) {
+			
+			int zipcodeNumber = Integer.parseInt(zipcodeComb[i]);
+			
+			// ZipCode length check
+			if (zipcodeNumber < 0 || zipcodeNumber > 99999)
+				throw new IllegalArgumentException("Invalid length of ZipCode");
+	
+			zipcodePair[i] = zipcodeNumber;
+		}
+		
+		// ZipCode Value Check
+		if (zipcodePair[0] > zipcodePair[1])
+			throw new IllegalArgumentException("Invalid ZipCode Pair");
+		
+		return zipcodePair;
+		
+	}
+}

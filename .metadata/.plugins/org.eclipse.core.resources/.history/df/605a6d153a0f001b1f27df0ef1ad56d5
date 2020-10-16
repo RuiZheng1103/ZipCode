@@ -1,0 +1,21 @@
+package com.rui.zipcode;
+
+import org.junit.*;
+import static com.rui.zipcode.ZipCodeMerge.*;
+
+import java.util.Arrays;
+public class ZipCodeMergeTest {
+
+	@Test(expected = IllegalArgumentException.class)
+	public void illegalInput() {
+		merge(null);
+	}
+	
+	@Test
+	public void mergePassCase() {
+		int[][] nums = {{10000, 60000}};		
+		int[][] res = merge(new int[][]{{10000,20000},{10000,40000},{30000,60000}});	
+		assert(Arrays.deepEquals(res, nums));
+
+	}
+}

@@ -1,0 +1,25 @@
+package com.rui.zipcode;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+public class App {
+
+	private static Scanner scanner;
+	
+	public static void main(String[] args) {
+		
+		scanner = new Scanner(System.in);
+		String rawzipcode = scanner.nextLine();
+		
+		ZipCodePreProcess zipcodeprocessor = new ZipCodePreProcess();
+		List<int[]> zipcodeArray = zipcodeprocessor.generateZipCodeArray(rawzipcode);
+		
+		ZipCodeMerge zipcodemerge = new ZipCodeMerge();
+		List<int[]> zipcodeMergeArray = zipcodemerge.merge(zipcodeArray);
+		
+		zipcodeMergeArray.stream().forEach(t -> System.out.println(Arrays.toString(t)));
+	}
+
+}

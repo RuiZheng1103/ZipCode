@@ -1,0 +1,13 @@
+package com.rui.zipcode;
+
+import org.junit.*;
+import static org.junit.Assert.assertEquals;
+
+public class ZipCodePreProcessTest {
+
+	@Test
+	public void generateZipCodeArrayTest() {
+		assert("[10000,20000] [30000, 40000] [50000,60000]" == "[10000,20000] [30000, 40000] [50000,60000]");
+		assertEquals();
+	}
+}
