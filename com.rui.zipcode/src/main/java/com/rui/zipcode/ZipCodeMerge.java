@@ -1,28 +1,37 @@
 package com.rui.zipcode;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class ZipCodeMerge {
 	
-	public static String[][] merge(String[][] intervals) {
-		if (intervals == null || intervals.length == 0) 
-			throw new IllegalArgumentException("Invalid Input");
+	public static List<ZipCode> mergeZipCode(List<ZipCode> zipcodelist) throws Exception{
+		/*
+		 * Merge ZipCodes if there is an overlapping
+		 */
+		if (zipcodelist == null || zipcodelist.size() == 0) 
+			throw new IllegalArgumentException("Empty Input");
 		
-		Arrays.sort(intervals, (String[] v1, String[] v2) -> Integer.parseInt(v1[0]) - Integer.parseInt(v2[0]));
+		// Sort by lower bound
+		zipcodelist.sort((ZipCode z1, ZipCode z2) -> z1.getLower_bound() - z2.getLower_bound());
+
+		Stack<ZipCode> stack = new Stack<>();
 		
-		Stack<String[]> s = new Stack<>();
-		for (String[] interval : intervals) {
-			if (s.isEmpty() || Integer.parseInt(s.peek()[1]) < Integer.parseInt(interval[0])) {
-				s.push(interval);
-			} else {
-				String[] lastInterval = s.pop();
-				if (Integer.parseInt(lastInterval[1]) < Integer.parseInt(interval[1])) {
-					lastInterval[1] = interval[1];
+		for (ZipCode zipcode : zipcodelist) {	
+			// compare last upper bound with current lower bound
+			if (stack.isEmpty() || stack.peek().getUpper_bound() < zipcode.getLower_bound()) {
+				stack.push(zipcode);
+			} 
+			// compare last upper bound with current upper bound
+			else {
+				ZipCode last_zipcode = stack.pop();
+				if (last_zipcode.getUpper_bound() < zipcode.getUpper_bound()) {
+					last_zipcode.setUpper_bound(zipcode.getUpper_bound());
 				}
-				s.push(lastInterval);
+				stack.push(last_zipcode);
 			}
 		}
-		return s.toArray(new String[s.size()][]);
+		return new ArrayList<>(stack);
 	}
 }

@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?><testrun name="ZipCodePreProcessTest" project="com.rui.zipcode" tests="4" started="4" failures="0" errors="0" ignored="0">
-  <testsuite name="com.rui.zipcode.ZipCodePreProcessTest" time="0.0">
-    <testcase name="validationCatchInvalidLength" classname="com.rui.zipcode.ZipCodePreProcessTest" time="0.0"/>
-    <testcase name="generateZipCodeArrayTest" classname="com.rui.zipcode.ZipCodePreProcessTest" time="0.0"/>
-    <testcase name="validationCatchMissingValue" classname="com.rui.zipcode.ZipCodePreProcessTest" time="0.0"/>
-    <testcase name="validationCatchInvalidPair" classname="com.rui.zipcode.ZipCodePreProcessTest" time="0.0"/>
-  </testsuite>
-</testrun>

@@ -5,49 +5,71 @@ import java.util.List;
 
 public class ZipCodePreProcess {
 
-	public static String[][] generateZipCodeArray(String zipcodeString) {
+	public static List<ZipCode> getZipCodeList(String zipcodeString) throws Exception{
+		/* 
+		 * Split String by Space between each zipcodeInterval
+		 */
 		String[] zipcodeIntervals = zipcodeString.replaceAll(",\\s*", ",").split(" ");
 		
-		List<String[]> zipcodeList = new ArrayList<String[]>();
+		List<ZipCode> zipcodelist = new ArrayList<ZipCode>();
 		for (int i = 0; i < zipcodeIntervals.length; i++) {
-			zipcodeList.add(validateZipCode(zipcodeIntervals[i]));
+			zipcodelist.add(checkAndGetZipCode(zipcodeIntervals[i]));
 		}
 		
-		String[][] zipcodeArray = new String[zipcodeList.size()][2];
-		for (int i = 0; i < zipcodeList.size(); i++) {
-			zipcodeArray[i] = zipcodeList.get(i);
-		}
-		return zipcodeArray;
+		return zipcodelist;
+	}
+
+
+	static ZipCode checkAndGetZipCode(String zipcodeInterval) throws Exception{
+		/*
+		 * Transfer ZipCode Interval into ZipCode Entity
+		 */
+		String[] zipcoderange = zipcodeInterval.replaceAll("\\[|\\]|\\s", "").split(",");
+		
+		if (zipcoderange.length != 2)
+			throw new IllegalArgumentException("Invalid ZipCode Bound Number : " + zipcoderange.length);
+		
+		if (!checkLength(zipcoderange[0]))
+			throw new IllegalArgumentException("Invalid Lower Boundary Length : " + zipcoderange[0].length());
+		
+		if (!checkLength(zipcoderange[1]))
+			throw new IllegalArgumentException("Invalid Upper Boundary Length : " + zipcoderange[1].length());
+				
+		int lower_bound = parseZipCode(zipcoderange[0]);
+		int upper_bound = parseZipCode(zipcoderange[1]);
+		
+		// lower_bound and upper_bound are both 5-digit so checkValue must be TRUE
+		if (!checkValue(lower_bound))
+			throw new IllegalArgumentException("Invalid Lower Boundary Value : " + lower_bound);
+
+		if (!checkValue(upper_bound))
+			throw new IllegalArgumentException("Invalid Upper Boundary Value : " + upper_bound);
+
+		if (lower_bound > upper_bound)
+			throw new IllegalArgumentException("Lower Boundary Value : " + lower_bound + " is larger than Upper Boundary Value : " + upper_bound);
+		
+		return new ZipCode(lower_bound, upper_bound);
+	}
+
+	private static int parseZipCode(String zipcode_bound) {
+		/*
+		 * parse ZipCode to int value
+		 */
+		return Integer.parseInt(zipcode_bound);
+	}
+
+	private static boolean checkValue(int zipcode_bound_value) {
+		/*
+		 * check value of bound
+		 */
+		return zipcode_bound_value >= 0 && zipcode_bound_value <= 99999;		
+	}
+
+	private static boolean checkLength(String zipcode_bound) {
+		/*
+		 * check length of bound
+		 */
+		return zipcode_bound.length() == 5;			
 	}
 	
-	public static String[] validateZipCode(String zipcodeInterval) {
-		String[] zipcodeComb = zipcodeInterval.replaceAll("\\[|\\]|\\s", "").split(",");
-	
-		// ZipCode Pair Check
-		if (zipcodeComb.length != 2)
-			throw new IllegalArgumentException("Missing ZipCode and Current Pair Number is :" + zipcodeComb.length);
-		
-		int[] zipcodePair = new int[2];
-		for (int i = 0; i < zipcodeComb.length; i++) {
-			
-			// ZipCode length check
-			if (zipcodeComb[i].length() != 5)
-				throw new IllegalArgumentException("Invalid length of ZipCode and Current is " + zipcodeComb[i].length());
-			
-			int zipcodeNumber = Integer.parseInt(zipcodeComb[i]);
-			
-			// ZipCode length check
-			if (zipcodeNumber < 0 || zipcodeNumber > 99999)
-				throw new IllegalArgumentException("Out of range and ZipCode is " + zipcodeComb[i]);
-			
-			zipcodePair[i] = zipcodeNumber;
-		}
-		
-		// ZipCode Value Check
-		if (zipcodePair[0] > zipcodePair[1])
-			throw new IllegalArgumentException("Invalid Boundary of ZipCode ");
-		
-		return zipcodeComb;
-		
-	}
 }
